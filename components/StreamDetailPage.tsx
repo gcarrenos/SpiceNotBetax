@@ -32,10 +32,37 @@ export default function StreamDetailPage({ streamId }: StreamDetailPageProps) {
 
   useEffect(() => {
     fetchStream()
-    // Refresh stream status every 5 seconds
-    const interval = setInterval(fetchStream, 5000)
-    return () => clearInterval(interval)
   }, [streamId])
+
+  // Separate effect for status updates that won't reset the player
+  useEffect(() => {
+    if (!stream) return
+    
+    // Refresh stream status every 15 seconds (less frequent to avoid interrupting playback)
+    const interval = setInterval(() => {
+      fetch('/api/live-streams/' + streamId)
+        .then(res => res.json())
+        .then(data => {
+          if (data.stream) {
+            // Only update status and other non-critical fields, preserve playback_ids
+            setStream(prev => {
+              if (!prev) return data.stream
+              // Only update if status actually changed
+              if (prev.status !== data.stream.status || prev.active_asset_id !== data.stream.active_asset_id) {
+                return {
+                  ...prev,
+                  status: data.stream.status,
+                  active_asset_id: data.stream.active_asset_id,
+                }
+              }
+              return prev // Return same object reference to prevent re-render
+            })
+          }
+        })
+        .catch(err => console.error('Error updating stream status:', err))
+    }, 15000) // Increased to 15 seconds
+    return () => clearInterval(interval)
+  }, [streamId, stream?.id]) // Only re-run if stream ID changes
 
   const fetchStream = async () => {
     try {
@@ -44,7 +71,17 @@ export default function StreamDetailPage({ streamId }: StreamDetailPageProps) {
       const data = await response.json()
       
       if (response.ok) {
-        setStream(data.stream)
+        // Only set stream if it's the first load or if playback_ids changed
+        if (!stream || JSON.stringify(stream.playback_ids) !== JSON.stringify(data.stream.playback_ids)) {
+          setStream(data.stream)
+        } else {
+          // Just update status without replacing the whole object
+          setStream(prev => prev ? {
+            ...prev,
+            status: data.stream.status,
+            active_asset_id: data.stream.active_asset_id,
+          } : data.stream)
+        }
         setError(null)
       } else {
         setError(data.error || 'Failed to load stream')
