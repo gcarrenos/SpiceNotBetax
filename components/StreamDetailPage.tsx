@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import MuxPlayer from '@mux/mux-player-react'
 import Header from './Header'
 import Sidebar from './Sidebar'
+import StreamChat from './StreamChat'
 
 interface LiveStream {
   id: string
@@ -182,7 +183,8 @@ export default function StreamDetailPage({ streamId }: StreamDetailPageProps) {
             </div>
 
             <div className="stream-detail-content">
-              <div className="stream-player-section">
+              <div className="stream-main-area">
+                <div className="stream-player-section">
                 {playbackId && isLive ? (
                   <div className="main-stream-player">
                     <MuxPlayer
@@ -222,6 +224,11 @@ export default function StreamDetailPage({ streamId }: StreamDetailPageProps) {
                     ))}
                   </div>
                 )}
+                </div>
+
+                <div className="stream-chat-wrapper">
+                  <StreamChat />
+                </div>
               </div>
 
               <div className="stream-info-sidebar">
