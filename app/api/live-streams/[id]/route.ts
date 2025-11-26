@@ -3,7 +3,7 @@ import mux from '@/lib/mux'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
@@ -13,7 +13,8 @@ export async function GET(
       )
     }
 
-    const liveStream = await mux.video.liveStreams.retrieve(params.id)
+    const { id } = await params
+    const liveStream = await mux.video.liveStreams.retrieve(id)
     
     return NextResponse.json({
       stream: liveStream,
@@ -29,7 +30,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
@@ -39,7 +40,8 @@ export async function DELETE(
       )
     }
 
-    await mux.video.liveStreams.delete(params.id)
+    const { id } = await params
+    await mux.video.liveStreams.delete(id)
     
     return NextResponse.json({
       success: true,
