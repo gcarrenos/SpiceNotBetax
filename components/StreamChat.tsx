@@ -77,10 +77,7 @@ export default function StreamChat() {
     return () => clearInterval(interval)
   }, [isPaused])
 
-  useEffect(() => {
-    // Auto-scroll to bottom when new message arrives
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  // Removed auto-scroll - let users control their own scroll position
 
   const createFakeMessage = (): ChatMessage => {
     const username = FAKE_USERS[Math.floor(Math.random() * FAKE_USERS.length)]

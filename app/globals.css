@@ -1659,6 +1659,14 @@ a {
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 1rem;
+  background-color: #f9f9f9;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .product-image-placeholder {
@@ -1667,7 +1675,9 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .product-image-content {
