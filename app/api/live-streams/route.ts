@@ -37,10 +37,10 @@ export async function POST(request: NextRequest) {
     const { playbackPolicy = 'public', reconnectWindow = 60 } = body
 
     const liveStream = await mux.video.liveStreams.create({
-      playback_policy: playbackPolicy === 'signed' ? 'signed' : 'public',
+      playback_policy: playbackPolicy === 'signed' ? ['signed'] : ['public'],
       reconnect_window: reconnectWindow,
       new_asset_settings: {
-        playback_policy: playbackPolicy === 'signed' ? 'signed' : 'public',
+        playback_policy: playbackPolicy === 'signed' ? ['signed'] : ['public'],
       },
     })
 
