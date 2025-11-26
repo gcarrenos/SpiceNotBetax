@@ -11,9 +11,8 @@ interface ChatMessage {
 }
 
 const FAKE_USERS = [
-  'viewer123', 'streamlover', 'livefan99', 'watchtime', 'streamerpro',
-  'livestreamer', 'viewmaster', 'streamking', 'watchnow', 'livetime',
-  'streamfan', 'viewerpro', 'livestream', 'watchfan', 'streamtime'
+  'Fabian', 'Avi', 'Anthony', 'Rosa', 'Michele',
+  'Mauro', 'Kisten', 'Robert', 'Ruben', 'Danielle', 'Essence'
 ]
 
 const FAKE_MESSAGES = [
