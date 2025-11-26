@@ -6,6 +6,7 @@ import MuxPlayer from '@mux/mux-player-react'
 import Header from './Header'
 import Sidebar from './Sidebar'
 import StreamChat from './StreamChat'
+import FeaturedProduct from './FeaturedProduct'
 
 interface LiveStream {
   id: string
@@ -312,6 +313,8 @@ export default function StreamDetailPage({ streamId }: StreamDetailPageProps) {
                     </div>
                   </div>
                 )}
+
+                <FeaturedProduct />
               </div>
             </div>
           </div>
