@@ -233,6 +233,8 @@ export default function StreamDetailPage({ streamId }: StreamDetailPageProps) {
               </div>
 
               <div className="stream-info-sidebar">
+                <FeaturedProduct />
+
                 <div className="stream-info-card">
                   <h3>Stream Information</h3>
                   
@@ -313,8 +315,6 @@ export default function StreamDetailPage({ streamId }: StreamDetailPageProps) {
                     </div>
                   </div>
                 )}
-
-                <FeaturedProduct />
               </div>
             </div>
           </div>
