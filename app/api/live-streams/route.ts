@@ -34,7 +34,14 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { playbackPolicy = 'public', reconnectWindow = 60 } = body
+    const { 
+      playbackPolicy = 'public', 
+      reconnectWindow = 60,
+      title,
+      description,
+      userId,
+      userName
+    } = body
 
     const liveStream = await mux.video.liveStreams.create({
       playback_policy: playbackPolicy === 'signed' ? ['signed'] : ['public'],
@@ -42,10 +49,25 @@ export async function POST(request: NextRequest) {
       new_asset_settings: {
         playback_policy: playbackPolicy === 'signed' ? ['signed'] : ['public'],
       },
+      // Add passthrough data for metadata
+      passthrough: JSON.stringify({
+        title: title || 'Live Stream',
+        description: description || '',
+        userId: userId || '',
+        userName: userName || '',
+        createdAt: new Date().toISOString(),
+        source: 'ios-app'
+      }),
     })
 
     return NextResponse.json({
       stream: liveStream,
+      rtmpUrl: `rtmp://global-live.mux.com:5222/app/${liveStream.stream_key}`,
+      streamKey: liveStream.stream_key,
+      playbackId: liveStream.playback_ids?.[0]?.id,
+      hlsUrl: liveStream.playback_ids?.[0]?.id 
+        ? `https://stream.mux.com/${liveStream.playback_ids[0].id}.m3u8`
+        : null,
     })
   } catch (error: any) {
     console.error('Error creating live stream:', error)
